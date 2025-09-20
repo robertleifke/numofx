@@ -1,103 +1,93 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button"
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="max-w-7xl mx-auto px-6 py-4 lg:px-12">
+        <div className="flex items-center justify-between">
+          <div className="flex-1"></div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <nav className="hidden md:flex items-center space-x-8">
+            <a href="#" className="text-foreground hover:text-muted-foreground transition-colors">
+              Home
+            </a>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              About
+            </a>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              Resources
+            </a>
+          </nav>
+
+          <div className="flex-1 flex justify-end">
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6">
+              Secure Your Rate
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="max-w-7xl mx-auto px-6 lg:px-12 mt-8">
+        <div className="bg-muted/80 rounded-3xl px-8 py-16 lg:px-16 lg:py-24">
+          {/* Main Headline */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 text-balance">Lock In FX Rates</h1>
+            <p className="text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto text-balance">
+              Protect your business from currency risk with the most competitive FX forward rates.
+            </p>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 h-12">
+              Secure Your Rate
+            </Button>
+            <Button variant="outline" className="rounded-full px-8 py-3 h-12 border-border bg-transparent">
+              Learn More
+            </Button>
+          </div>
+
+          {/* Dashboard Mockups */}
+          <div className="w-full">
+            {/* Center Chart */}
+            <div className="bg-slate-800 rounded-2xl p-6 text-white w-full">
+              <div className="flex items-center justify-center mb-6">
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold">Exchange Rate USDT/cKES</h3>
+                  <div className="text-xs text-gray-400 mt-1">3 month tenor</div>
+                </div>
+              </div>
+
+              <div className="h-48 relative mx-auto max-w-6xl">
+                <svg className="w-full h-full" viewBox="0 0 300 150">
+                  <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M 0 120 Q 50 100 100 80 T 200 70 T 300 60" stroke="#3b82f6" strokeWidth="2" fill="none" />
+                  <path d="M 0 120 Q 50 100 100 80 T 200 70 T 300 60 L 300 150 L 0 150 Z" fill="url(#gradient)" />
+                </svg>
+                <div className="absolute top-4 right-4 bg-gray-700 px-2 py-1 rounded text-xs">128.15</div>
+              </div>
+
+              <div className="flex items-center justify-center space-x-4 mt-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span className="text-xs">Bid</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                  <span className="text-xs">Offer</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
-  );
+  )
 }
