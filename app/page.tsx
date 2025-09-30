@@ -11,18 +11,6 @@ export default function HomePage() {
             <img src="/numo-logo.png" alt="Numo" className="h-12" />
           </div>
 
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-foreground hover:text-muted-foreground transition-colors">
-              Home
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-              About
-            </a>
-            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-              Resources
-            </a>
-          </nav>
-
           <div className="flex-1 flex justify-end">
             <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6">
               Secure Your Rate
@@ -74,27 +62,16 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Center: Navigation */}
-            <nav className="flex items-center space-x-8">
-              <a href="#" className="text-sm text-foreground hover:text-muted-foreground transition-colors">
-                Home
-              </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </a>
-              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-                Resources
-              </a>
-            </nav>
-
             {/* Right: Social Links */}
             <div className="flex items-center gap-4">
               <span className="text-sm text-muted-foreground">Let's stay in touch</span>
               <div className="flex items-center gap-2">
                 <a
-                  href="#"
+                  href="https://x.com/numoforex"
                   className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
                   aria-label="X (Twitter)"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
