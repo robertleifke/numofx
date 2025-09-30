@@ -6,13 +6,15 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Numo - FX Forward Contracts | Lock in Competitive Exchange Rates",
+  title: "FX for Businesses | Lock in FX Rates",
   description:
     "Secure competitive forward exchange rates with Numo. Protect your business from currency volatility with flexible forward contracts for KES, USD and more. Get instant quotes today.",
-  generator: "v0.app",
-  icons: {
-    icon: "/favicon.ico",
-  },
+  icons: [
+    {
+      rel: "icon",
+      url: "/favicon.ico",
+    },
+  ],
 }
 
 export default function RootLayout({
