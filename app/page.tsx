@@ -1,103 +1,119 @@
-import Image from "next/image";
+import { Button } from "@/components/ui/button"
+import USDKESChart from "@/components/USDKESChart"
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Header */}
+      <header className="max-w-7xl mx-auto px-6 py-4 lg:px-12 w-full">
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            <img src="/numo-logo.png" alt="Numo" className="h-12" />
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          <nav className="hidden md:flex items-center space-x-8">
+            <a href="#" className="text-foreground hover:text-muted-foreground transition-colors">
+              Home
+            </a>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              About
+            </a>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+              Resources
+            </a>
+          </nav>
+
+          <div className="flex-1 flex justify-end">
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6">
+              Secure Your Rate
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <main className="max-w-7xl mx-auto px-6 lg:px-12 mt-8 flex-1 w-full">
+        <div className="bg-muted/80 rounded-3xl px-8 py-16 lg:px-16 lg:py-24">
+          {/* Main Headline */}
+          <div className="text-center mb-8">
+            <h1 className="text-4xl lg:text-6xl font-bold text-foreground mb-6 text-balance">Lock In FX Rates</h1>
+            <p className="text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto text-balance">
+              Protect your business from currency risk with the most competitive FX forward rates.
+            </p>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-8 py-3 h-12">
+              Secure Your Rate
+            </Button>
+            <Button variant="outline" className="rounded-full px-8 py-3 h-12 border-border bg-transparent">
+              Learn More
+            </Button>
+          </div>
+
+          {/* Dashboard Mockups */}
+          <div className="w-full">
+            {/* Center Chart */}
+            <div className="w-full h-[500px]">
+              <USDKESChart />
+            </div>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer Section */}
+      <footer className="border-t border-border mt-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            {/* Left: Logo and Copyright */}
+            <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-12">
+              <img src="/numo-logo.png" alt="Numo" className="h-8" />
+              <p className="text-sm text-muted-foreground">
+                Copyright © 2025 Numo Technologies Inc. All rights reserved
+              </p>
+            </div>
+
+            {/* Center: Navigation */}
+            <nav className="flex items-center space-x-8">
+              <a href="#" className="text-sm text-foreground hover:text-muted-foreground transition-colors">
+                Home
+              </a>
+              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                About
+              </a>
+              <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                Resources
+              </a>
+            </nav>
+
+            {/* Right: Social Links */}
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-muted-foreground">Let's stay in touch</span>
+              <div className="flex items-center gap-2">
+                <a
+                  href="#"
+                  className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+                  aria-label="X (Twitter)"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </a>
+                <a
+                  href="#"
+                  className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:bg-muted transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.564v11.452zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
