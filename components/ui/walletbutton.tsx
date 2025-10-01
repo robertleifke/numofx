@@ -50,7 +50,11 @@ export function WalletButton() {
 
   if (!mounted) {
     return (
-      <Button size="sm" disabled>
+      <Button
+        variant="link"
+        disabled
+        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6 opacity-50"
+      >
         Loading...
       </Button>
     );
@@ -58,11 +62,19 @@ export function WalletButton() {
 
   if (isConnected && address) {
     return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">
-          {address.slice(0, 6)}...{address.slice(-4)}
-        </span>
-        <Button variant="outline" size="sm" onClick={disconnectWallet}>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-background/50 rounded-full border border-border">
+          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          <span className="text-sm font-medium text-foreground">
+            {address.slice(0, 6)}...{address.slice(-4)}
+          </span>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={disconnectWallet}
+          className="rounded-full"
+        >
           Disconnect
         </Button>
       </div>
@@ -70,7 +82,11 @@ export function WalletButton() {
   }
 
   return (
-    <Button size="sm" onClick={connectWallet}>
+    <Button
+      variant="link"
+      onClick={connectWallet}
+      className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6"
+    >
       Connect Wallet
     </Button>
   );
