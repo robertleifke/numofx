@@ -1,64 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { injected, walletConnect, coinbaseWallet } from "wagmi/connectors";
 
 export function WalletButton() {
-  const [mounted, setMounted] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
-  const [address, setAddress] = useState<string | null>(null);
+  const { address, isConnected, chain } = useAccount();
+  const { connect, connectors, isPending } = useConnect();
+  const { disconnect } = useDisconnect();
 
-  useEffect(() => {
-    setMounted(true);
-
-    // Check if MetaMask is installed
-    if (typeof window !== "undefined" && window.ethereum) {
-      // Check if already connected
-      window.ethereum
-        .request({ method: "eth_accounts" })
-        .then((accounts: string[]) => {
-          if (accounts.length > 0) {
-            setIsConnected(true);
-            setAddress(accounts[0]);
-          }
-        });
-    }
-  }, []);
-
-  const connectWallet = async () => {
-    if (typeof window !== "undefined" && window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        if (accounts.length > 0) {
-          setIsConnected(true);
-          setAddress(accounts[0]);
-        }
-      } catch (error) {
-        console.error("Failed to connect wallet:", error);
-      }
-    } else {
-      alert("MetaMask is not installed. Please install MetaMask to continue.");
-    }
-  };
-
-  const disconnectWallet = () => {
-    setIsConnected(false);
-    setAddress(null);
-  };
-
-  if (!mounted) {
-    return (
-      <Button
-        variant="link"
-        disabled
-        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6 opacity-50"
-      >
-        Loading...
-      </Button>
+  const handleConnect = () => {
+    // Try to connect with MetaMask first, then fallback to other connectors
+    const metaMaskConnector = connectors.find(
+      (connector) => connector.id === "injected"
     );
-  }
+    const connector = metaMaskConnector || connectors[0];
+
+    if (connector) {
+      connect({ connector });
+    }
+  };
 
   if (isConnected && address) {
     return (
@@ -68,11 +29,14 @@ export function WalletButton() {
           <span className="text-sm font-medium text-foreground">
             {address.slice(0, 6)}...{address.slice(-4)}
           </span>
+          {chain && (
+            <span className="text-xs text-muted-foreground">{chain.name}</span>
+          )}
         </div>
         <Button
           variant="outline"
           size="sm"
-          onClick={disconnectWallet}
+          onClick={() => disconnect()}
           className="rounded-full"
         >
           Disconnect
@@ -84,10 +48,11 @@ export function WalletButton() {
   return (
     <Button
       variant="link"
-      onClick={connectWallet}
+      onClick={handleConnect}
+      disabled={isPending}
       className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full px-6"
     >
-      Connect Wallet
+      {isPending ? "Connecting..." : "Connect Wallet"}
     </Button>
   );
 }

@@ -3,6 +3,8 @@
 import { Clock } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useForwardRates } from "@/lib/hooks/useFxRates";
+import { useWalletInfo } from "@/lib/hooks/useWallet";
 
 export function ForwardInterface() {
   const [tenor, setTenor] = useState("6M");
@@ -10,11 +12,15 @@ export function ForwardInterface() {
   const [currency, setCurrency] = useState<"USD" | "KES">("USD");
   const [countdown, setCountdown] = useState(30);
 
-  // Mock data for now
-  const forwardRate = "130.9700";
-  const spotRate = "129.1500";
-  const forwardPoints = "1.82";
-  const expiryDate = "31 Dec 2025";
+  // Use wagmi hooks
+  const { isConnected } = useWalletInfo();
+  const { data: forwardRateData, isLoading, error } = useForwardRates(tenor);
+
+  // Fallback to mock data if API is not available
+  const forwardRate = forwardRateData?.rate?.toFixed(4) || "130.9700";
+  const spotRate = forwardRateData?.spot?.toFixed(4) || "129.1500";
+  const forwardPoints = forwardRateData?.forwardPoints?.toFixed(2) || "1.82";
+  const expiryDate = forwardRateData?.expiry || "31 Dec 2025";
 
   const tenors = ["1M", "3M", "6M", "12M", "Custom"];
 
@@ -132,8 +138,16 @@ export function ForwardInterface() {
 
         {/* Action Button */}
         <div className="flex justify-center">
-          <Button size="lg" className="rounded-full px-12 py-4 h-14 text-lg">
-            Accept & Lock
+          <Button
+            size="lg"
+            className="rounded-full px-12 py-4 h-14 text-lg"
+            disabled={!isConnected || isLoading}
+          >
+            {!isConnected
+              ? "Connect Wallet to Trade"
+              : isLoading
+              ? "Loading Rates..."
+              : "Accept & Lock"}
           </Button>
         </div>
       </div>
