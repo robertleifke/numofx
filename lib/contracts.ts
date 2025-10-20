@@ -57,6 +57,27 @@ export const TOKEN_METADATA = {
   },
 } as const;
 
+// YieldSpace Pool addresses (Celo Mainnet)
+export const YIELDSPACE_POOLS = {
+  // cKES/USD Pool
+  POOL_CKES: {
+    address: "0xd398b65957B50F719b698e670f51F5cd4D77dbf4" as Address,
+    baseToken: "0x456a3D042C0DbD3db53D5489e98dFb038553B0d0" as Address,
+    fyToken: "0x774Dce3065C04A61D564470f78b07411Bd38edc5" as Address,
+    maturity: 7884000,
+    g1Fee: 20, // 20 basis points
+  },
+
+  // USDT Pool
+  POOL_USDT: {
+    address: "0xE34Ad943bCbb864B46369D7210827939F26A324b" as Address,
+    baseToken: "0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e" as Address,
+    fyToken: "0xCD3F00B3C646210DE13557d6C555E98efea7F767" as Address,
+    maturity: 7884000,
+    g1Fee: 20, // 20 basis points
+  },
+} as const;
+
 // Forward contract addresses (these would be your actual deployed contracts)
 export const FORWARD_CONTRACTS = {
   // Mainnet

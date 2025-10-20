@@ -1,23 +1,91 @@
 "use client";
 
-import { Settings, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { Settings, ArrowRight, AlertCircle, CheckCircle2 } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { useForwardRates } from "@/lib/hooks/useFxRates";
 import { useWalletInfo } from "@/lib/hooks/useWallet";
+import {
+  usePoolInfo,
+  useSellBasePreview,
+  useImpliedRate,
+  useSellBase,
+  calculateMinOutput,
+  type PoolName,
+} from "@/lib/hooks/useYieldSpacePools";
+import { useApprovalWorkflow } from "@/lib/hooks/useTokenApproval";
+import { parseUnits, formatUnits, type Address } from "viem";
+import { useAccount } from "wagmi";
 
 export function ForwardInterface() {
   const [usdAmount, setUsdAmount] = useState("1000000");
   const [showDetails, setShowDetails] = useState(false);
+  const [slippageBps, setSlippageBps] = useState(50); // 0.5% default slippage
+  const [txHash, setTxHash] = useState<`0x${string}` | undefined>();
 
   // Use wagmi hooks
   const { isConnected } = useWalletInfo();
+  const { address } = useAccount();
 
-  // Default to 3M tenor as that's the target
-  const { data: forwardRateData, isLoading, error } = useForwardRates("3M");
+  // For now, default to cKES pool - this could be made configurable
+  const poolName: PoolName = "PoolNonTv_cKES";
+  const poolInfo = usePoolInfo(poolName);
 
-  // Fallback to mock data if API is not available
-  const forwardRate = forwardRateData?.rate?.toFixed(4) || "130.9700";
+  // Parse USD input amount to bigint (assuming 18 decimals for base token)
+  const baseAmountBigInt = useMemo(() => {
+    const cleanAmount = usdAmount.replace(/,/g, "");
+    if (!cleanAmount || parseFloat(cleanAmount) <= 0) return undefined;
+    try {
+      return parseUnits(cleanAmount, 18); // Assuming 18 decimals
+    } catch {
+      return undefined;
+    }
+  }, [usdAmount]);
+
+  // Get preview of how many FY tokens user will receive
+  const { fyTokenOut, isLoading: isLoadingPreview } = useSellBasePreview(poolName, baseAmountBigInt);
+
+  // Get implied rate from pool
+  const { rate: impliedRate, isLoading: isLoadingRate } = useImpliedRate(poolName);
+
+  // Calculate minimum output with slippage protection
+  const minFYTokenOut = useMemo(() => {
+    if (!fyTokenOut) return undefined;
+    return calculateMinOutput(fyTokenOut, slippageBps);
+  }, [fyTokenOut, slippageBps]);
+
+  // Token approval workflow
+  const {
+    needsApproval,
+    approve,
+    isPending: isApproving,
+    isConfirming: isConfirmingApproval,
+    isSuccess: isApprovalSuccess,
+  } = useApprovalWorkflow(
+    poolInfo.baseToken,
+    address,
+    poolInfo.address,
+    baseAmountBigInt ?? 0n
+  );
+
+  // Sell base transaction
+  const {
+    sellBase,
+    hash: sellHash,
+    isPending: isSelling,
+    error: sellError,
+  } = useSellBase();
+
+  // Track transaction hash
+  useEffect(() => {
+    if (sellHash) {
+      setTxHash(sellHash);
+    }
+  }, [sellHash]);
+
+  // Fallback to mock data for display if pool data not available
+  const { data: forwardRateData } = useForwardRates("3M");
+  const forwardRate = impliedRate?.toFixed(4) || forwardRateData?.rate?.toFixed(4) || "130.9700";
   const spotRate = forwardRateData?.spot?.toFixed(4) || "129.1500";
   const forwardPoints = forwardRateData?.forwardPoints?.toFixed(2) || "1.82";
   const expiryDate = forwardRateData?.expiry || "Dec 31, 2025";
@@ -162,14 +230,83 @@ export function ForwardInterface() {
             </div>
           </div>
 
-          {/* Lock Button */}
-          <Button
-            size="lg"
-            className="w-full rounded-full h-12 text-sm font-semibold bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90"
-            disabled={isLoading || !usdAmount || parseFloat(usdAmount) <= 0}
-          >
-            {isLoading ? "Loading rate..." : "Lock This Rate"}
-          </Button>
+          {/* Transaction Status Messages */}
+          {txHash && (
+            <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-2">
+              <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-green-900 dark:text-green-100">
+                  Transaction submitted!
+                </p>
+                <p className="text-xs text-green-700 dark:text-green-300 break-all">
+                  Hash: {txHash.slice(0, 10)}...{txHash.slice(-8)}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {sellError && (
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-xs font-medium text-red-900 dark:text-red-100">
+                  Transaction failed
+                </p>
+                <p className="text-xs text-red-700 dark:text-red-300">
+                  {sellError.message}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Lock Button or Approve Button */}
+          {!isConnected ? (
+            <Button
+              size="lg"
+              className="w-full rounded-full h-12 text-sm font-semibold bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90"
+              disabled
+            >
+              Connect Wallet to Continue
+            </Button>
+          ) : needsApproval && baseAmountBigInt ? (
+            <Button
+              size="lg"
+              className="w-full rounded-full h-12 text-sm font-semibold bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90"
+              onClick={approve}
+              disabled={isApproving || isConfirmingApproval}
+            >
+              {isApproving
+                ? "Approving..."
+                : isConfirmingApproval
+                ? "Confirming Approval..."
+                : "Approve Token Spending"}
+            </Button>
+          ) : (
+            <Button
+              size="lg"
+              className="w-full rounded-full h-12 text-sm font-semibold bg-black hover:bg-black/90 text-white dark:bg-white dark:text-black dark:hover:bg-white/90"
+              disabled={
+                isLoadingPreview ||
+                isLoadingRate ||
+                !usdAmount ||
+                parseFloat(usdAmount) <= 0 ||
+                !address ||
+                !minFYTokenOut ||
+                isSelling
+              }
+              onClick={() => {
+                if (address && minFYTokenOut) {
+                  sellBase(poolName, address, baseAmountBigInt!, minFYTokenOut);
+                }
+              }}
+            >
+              {isSelling
+                ? "Locking Rate..."
+                : isLoadingPreview
+                ? "Loading preview..."
+                : "Lock This Rate"}
+            </Button>
+          )}
 
           {/* Footer Text */}
           <p className="text-center text-xs text-muted-foreground">
@@ -197,8 +334,34 @@ export function ForwardInterface() {
                 <span className="text-foreground font-medium">+{forwardPoints}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Dealer spread</span>
-                <span className="text-foreground font-medium">0.15%</span>
+                <span className="text-muted-foreground">Pool fee</span>
+                <span className="text-foreground font-medium">{poolInfo.g1Fee / 100}%</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Slippage tolerance</span>
+                <span className="text-foreground font-medium">{slippageBps / 100}%</span>
+              </div>
+              {fyTokenOut && minFYTokenOut && (
+                <>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Expected FY tokens</span>
+                    <span className="text-foreground font-medium">
+                      {formatUnits(fyTokenOut, 18)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Minimum FY tokens</span>
+                    <span className="text-foreground font-medium">
+                      {formatUnits(minFYTokenOut, 18)}
+                    </span>
+                  </div>
+                </>
+              )}
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Pool address</span>
+                <span className="text-foreground font-medium font-mono">
+                  {poolInfo.address.slice(0, 6)}...{poolInfo.address.slice(-4)}
+                </span>
               </div>
             </div>
           )}
