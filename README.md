@@ -11,3 +11,7 @@ pnpm dev
 # or
 bun dev
 ```
+
+```bash
+npm install @privy-io/react-auth@^1.95.1 @privy-io/wagmi@^0.2.18 --force
+```
