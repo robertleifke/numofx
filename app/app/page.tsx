@@ -3,7 +3,7 @@ import { Header } from "@/components/layout/header";
 
 export default function AppPage() {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Header showWalletButton={true} />
       <ForwardInterface />
     </div>
