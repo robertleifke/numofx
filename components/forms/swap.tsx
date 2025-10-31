@@ -35,7 +35,7 @@ const CalendarPicker = ({ selectedDate, onDateSelect, onClose }: CalendarPickerP
 
     // Add empty cells for days before the first day of month
     for (let i = 0; i < firstDay; i++) {
-      days.push(<div key={`empty-${i}`} className="p-2"></div>);
+      days.push(<div key={`empty-${i}`} className="p-1.5"></div>);
     }
 
     // Add day cells
@@ -58,7 +58,7 @@ const CalendarPicker = ({ selectedDate, onDateSelect, onClose }: CalendarPickerP
           }}
           disabled={isPast}
           className={`
-            p-2 rounded-lg text-center font-medium transition
+            p-1.5 rounded-lg text-center text-sm font-medium transition
             ${isPast ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-blue-50 cursor-pointer'}
             ${isSelected ? 'bg-blue-600 text-white hover:bg-blue-700' : ''}
             ${isToday && !isSelected ? 'border-2 border-blue-600 text-blue-600' : ''}
@@ -77,30 +77,30 @@ const CalendarPicker = ({ selectedDate, onDateSelect, onClose }: CalendarPickerP
   };
 
   return (
-    <div className="absolute top-full mt-2 left-0 right-0 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 z-50">
+    <div className="absolute bottom-full mb-2 left-0 right-0 bg-white rounded-xl shadow-2xl border border-gray-200 p-3 z-50">
       {/* Calendar Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-2">
         <button
           onClick={() => changeMonth(-1)}
-          className="p-2 hover:bg-gray-100 rounded-lg transition"
+          className="p-1.5 hover:bg-gray-100 rounded-lg transition"
         >
-          <ChevronLeft className="w-5 h-5 text-gray-600" />
+          <ChevronLeft className="w-4 h-4 text-gray-600" />
         </button>
-        <div className="font-semibold text-gray-900">
+        <div className="font-semibold text-sm text-gray-900">
           {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
         </div>
         <button
           onClick={() => changeMonth(1)}
-          className="p-2 hover:bg-gray-100 rounded-lg transition"
+          className="p-1.5 hover:bg-gray-100 rounded-lg transition"
         >
-          <ChevronRight className="w-5 h-5 text-gray-600" />
+          <ChevronRight className="w-4 h-4 text-gray-600" />
         </button>
       </div>
 
       {/* Day Labels */}
-      <div className="grid grid-cols-7 gap-1 mb-2">
+      <div className="grid grid-cols-7 gap-1 mb-1">
         {['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].map(day => (
-          <div key={day} className="text-center text-xs font-semibold text-gray-500 p-2">
+          <div key={day} className="text-center text-xs font-semibold text-gray-500 p-1">
             {day}
           </div>
         ))}
@@ -111,7 +111,7 @@ const CalendarPicker = ({ selectedDate, onDateSelect, onClose }: CalendarPickerP
         {generateCalendarDays()}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-500 text-center">
+      <div className="mt-2 pt-2 border-t border-gray-200 text-xs text-gray-500 text-center">
         Past dates are disabled
       </div>
     </div>
@@ -185,7 +185,7 @@ export function ForwardInterface() {
   };
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4 bg-gray-50">
+    <div className="flex-1 flex items-center justify-center p-4 pb-20 bg-gray-50">
       <style>{`
         @keyframes slideDown {
           from {
